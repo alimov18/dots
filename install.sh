@@ -1,63 +1,34 @@
 #!/bin/bash
 
-mirror_service() {
-    sudo pacman -Syy rsync reflector --no-confirm
-    sudo systemctl enable reflector rsyncd
-    sudo systemctl start rsyncd
-    sudo reflector -c Uzbekistan -a 24 --sort rate --save /etc/pacman.d/mirrorlist
-}
+## first works
+clear
+yay -Syy paru-bin
+paru -Rns yay
 
-system_service() {
-    yes | sudo pacman -Rns dracut yay
-    yes | sudo pacman -S linux linux-headers mkinitcpio micro zsh git curl telegram-desktop wget neofetch ninja clang cmake gcc nodejs npm pnpm 
-}
 
-aur_tools() {
-    if [ -f /usr/bin/yay ]; then
-        yes | sudo pacman -Rns yay
-        cd ~/Documents/
-        git clone https://aur.archlinux.org/paru-bin
-        cd paru-bin
-        makepkg -si
-        paru -Syy mkinitcpio-firmware google-chrome visual-studio-code-bin android-studio ulauncher flameshot
-    else
-        cd ~/Documents/
-        git clone https://aur.archlinux.org/paru-bin
-        cd paru-bin
-        makepkg -si
-        paru -Syy mkinitcpio-firmware google-chrome visual-studio-code-bin android-studio ulauncher flameshot
-    fi
-}
+## Reflector
+sudo pacman -Syy reflector rsync
+sudo systemctl enable reflector rsyncd
+sudo systemctl start rsyncd
+sudo reflector -c Uzbekistan -a 24 --sort rate --save /etc/pacman.d/mirrorlist
+sudo pacman -Syy
 
-zsh_install() {
-    if [ -f /usr/bin/zsh ]; then
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-        rm -rf ~/.zshrc; cp ./.zshrc ~/
-    else
-        sudo pacman -S zsh
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-        rm -rf ~/.zshrc; cp ./.zshrc ~/
-    fi
-}
+## Remove packages
+sudo pacman -Rns dracut
 
-clean_service() {
-    sudo rm -rf /var/cache/pacman/pkg*
-    rm -rf ~/.cache/*
-}
+## Install packages
+sudo pacman -Syy linux mkinitcpio micro clang cmake ninja unzip unrar zsh flameshot ttf-cascadia-code-nerd ttf-fantasque-nerd
+paru -S mkinitcpio-firmware android-studio google-chrome visual-studio-code-bin ulauncher
 
-reboot_service() {
-    sudo systemctl reboot -i
-}
+## Shell
+yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# Skript boshlanishi
+## Git settings
 
-mirror_service
-system_service
-aur_tools
-zsh_install
-clean_service
-reboot_service
+git config --global user.email "cosmoasx@gmail.com"
+git config --global user.name "Anvar"
+
+clear
+
+#git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+#git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
