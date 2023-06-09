@@ -19,12 +19,16 @@ arch-chroot /mnt echo "hp" >> /etc/hostname
 arch-chroot /mnt echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 arch-chroot /mnt echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 arch-chroot /mnt locale-gen
+arch-chroot /mnt ln -sf /usr/share/zoneinfi/Asia/Tashkent /etc/localtime
 arch-chroot /mnt hwclock --systohc --utc
 arch-chroot /mnt echo "KEYMAP=us" >> /etc/vconsole.conf
 arch-chroot /mnt EDITOR=micro visudo
+
 arch-chroot /mnt yes | sudo pacman -Syy xarchiver e2fsprogs xfcprogs ip2route rsyncd 
 arch-chroot /mnt systemctl enable NetworkManager sshd wpa_supplicant rsyncd
 
 
 echo "grubinstall, mkinitcpio va exit senga qoldi ))"
+
+# bir balolar................
 
